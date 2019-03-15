@@ -1,4 +1,4 @@
-# user
+# users
 
 > A Vue.js project
 
