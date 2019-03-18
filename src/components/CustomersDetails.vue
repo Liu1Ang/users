@@ -1,18 +1,21 @@
 <template>
   <div class="Details container">
   	<h1 class="page-header">姓名：{{customer.name}}</h1>
-  	<ul class="list-group">
-  		<li class="list-group-item">电话：<input type="text" v-model="customer.phone"/></li>
-  		<li class="list-group-item">邮箱：{{customer.email}}</li>
-  	</ul>
-  	<ul class="list-group">
-  		<li class="list-group-item">学历：{{customer.education}}</li>
-  		<li class="list-group-item">毕业学校：{{customer.graduationschool}}</li>
-  		<li class="list-group-item">职业：{{customer.profession}}</li>
-  		<li class="list-group-item">简介：{{customer.profile}}</li>
-  	</ul>
-  	<button @click="delet">删除</button>
-  	<button @click="edit">编辑</button>
+  	<form @submit="nosubmit">
+	  	<ul class="list-group">
+	  		<li class="list-group-item">电话：<input type="text" :disabled="isdisabled" :class="boo?'':'active'" v-model="customer.phone"/></li>
+	  		<li class="list-group-item">邮箱：<input type="text" :disabled="isdisabled" :class="boo?'':'active'" v-model="customer.email"/></li>
+	  	</ul>
+	  	<ul class="list-group">
+	  		<li class="list-group-item">学历：<input type="text" :disabled="isdisabled" :class="boo?'':'active'" v-model="customer.education"/></li>
+	  		<li class="list-group-item">毕业学校：<input type="text" :disabled="isdisabled" :class="boo?'':'active'" v-model="customer.graduationschool"/></li>
+	  		<li class="list-group-item">职业：<input type="text" :disabled="isdisabled" :class="boo?'':'active'" v-model="customer.profession"/></li>
+	  		<li class="list-group-item">简介：<textarea class="form-control" :disabled="isdisabled" rows="6" :class="boo?'':'active'" v-model="customer.profile"></textarea></li>
+	  	</ul>
+	  	<button @click="delet">删除</button>
+	  	<button v-if="isedit" @click="edit">编辑</button>
+	  	<button v-if="!isedit" @click="editdetails">确认</button>
+  	</form>
   </div>
 </template>
 
@@ -24,7 +27,10 @@ export default {
     return {
       customer:{},
       id:'',
-      boo:false
+      boo:false,
+      active:'active',
+      isedit:true,
+      isdisabled:true
     }
   },
   methods:{
@@ -39,8 +45,16 @@ export default {
   			this.$router.push('/');
   		})
   	},
-  	edit(e){
-  			console.log(123);
+  	edit(){
+  		this.isedit = false;
+  	},
+  	nosubmit(e){
+  		e.preventDefault();
+  		this.boo = true;
+  		this.isdisabled = false
+  	},
+  	editdetails(e){
+//			console.log(123);
 				if(!this.customer.name || !this.customer.phone || !this.customer.email){
 					console.log('请填写相应信息！')
 				}else{
@@ -56,7 +70,7 @@ export default {
 					
 					axios.put("http://localhost:3000/user/"+this.id,newCustomer).then((data)=>{
 						console.log(data);
-						this.$router.push({path:"/",query:{alert:"用户信息添加成功！"}});
+						this.$router.push({path:"/",query:{alert:"用户信息修改成功！"}});
 					})
 				}
 				e.preventDefault();
@@ -71,5 +85,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	.active{
+		border-width: 0 !important;
+	}
+	input:disabled{
+		background: transparent !important;
+	}
 
 </style>

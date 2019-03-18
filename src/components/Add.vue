@@ -6,7 +6,7 @@
 				<h4>用户信息</h4>
 				<div class="form-group">
 					<label for="xing">姓名</label>
-					<input type="text" id="xing" class="form-control" placeholder="姓名" v-model="customer.name"/>
+					<input type="text" id="xing" class="form-control" placeholder="确认后不可更改！" v-model="customer.name"/>
 				</div>
 				<div class="form-group">
 					<label for="tell">电话</label>
